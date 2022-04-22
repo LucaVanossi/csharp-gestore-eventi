@@ -14,7 +14,7 @@ namespace GestoreEventi
         private int NumeroPostiEventoPrenotati=0;
 
 
-    public Evento(string NomeEvento, DateTime DataEvento, int NumeroPostiTotaliEvento)
+    public Evento(string TitoloEvento, DateTime DataEvento, int NumeroPostiTotaliEvento)
     {
             this.TitoloEvento = TitoloEvento;
             this.DataEvento = DataEvento;
@@ -57,6 +57,9 @@ namespace GestoreEventi
 
         public int PrenotaPosti(int PostiVoluti)
         {
+            // verifica se non sto prenotando oltre il totale, l'evento non deve essere già passato
+            this.NumeroPostiEventoPrenotati = this.NumeroPostiEventoPrenotati + PostiVoluti;
+
             int NumeroPostiaDisposizione = NumeroPostiTotaliEvento - PostiVoluti;
             Console.WriteLine("Numero posti a disposizione " + NumeroPostiaDisposizione);
             return NumeroPostiaDisposizione;
@@ -64,14 +67,17 @@ namespace GestoreEventi
 
         public int DisdiciPosti (int PostiDaDisdire)
         {
-            int NumeroPostiaDisposizione = NumeroPostiTotaliEvento + PostiDaDisdire;
+            // non devo andare sotto zero, l'evento non deve essere già passato
+            this.NumeroPostiEventoPrenotati = this.NumeroPostiEventoPrenotati - PostiDaDisdire;
+
+            int NumeroPostiaDisposizione = NumeroPostiTotaliEvento - PostiDaDisdire;
             Console.WriteLine("Numero posti a disposizione " + NumeroPostiaDisposizione);
             return NumeroPostiaDisposizione;
         }
 
         public override string ToString()
         {
-            return string.Format("Titolo: {0}\nData: {1}\n",
+            return string.Format("NomeEvento: {0}\nData: {1}\n",
             this.TitoloEvento,
             this.DataEvento.ToString("dd.MM.yyyy"));
         }
