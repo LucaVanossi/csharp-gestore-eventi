@@ -11,27 +11,27 @@ namespace GestoreEventi
         public string TitoloEvento;
         public DateTime DataEvento;
         private int NumeroPostiTotaliEvento;
-        private int NumeroPostiEventoPrenotati;
+        private int NumeroPostiEventoPrenotati=0;
 
 
-    public Evento(string NomeEvento, DateTime DataEvento, int NumeroPostiTotaleEvento)
+    public Evento(string NomeEvento, DateTime DataEvento, int NumeroPostiTotaliEvento)
     {
             this.TitoloEvento = TitoloEvento;
             this.DataEvento = DataEvento;
-            this.NumeroPostiTotaleEvento = NumeroPostiTotaleEvento;
+            this.NumeroPostiTotaliEvento = NumeroPostiTotaliEvento;
     }
 
-    private int GetNumeroPostiTotaliEvento()
+    public int GetNumeroPostiTotaliEvento()
     {
         return NumeroPostiTotaliEvento;
     }
 
-    private int GetNumeroPostiEventoPrenotati()
+    public int GetNumeroPostiEventoPrenotati()
     {
             return NumeroPostiEventoPrenotati;
     }
 
-     public void ControllaData()
+     public void ControllaData(DateTime DataEvento)
      {
             if (this.DataEvento < DateTime.Now)
             {
@@ -39,30 +39,34 @@ namespace GestoreEventi
             }
      }
 
-        public void ControllaTitolo()
+    public void ControllaTitolo(string TitoloEvento)
+    {
+        if (String.IsNullOrEmpty(TitoloEvento))
         {
-            if (String.IsNullOrEmpty(TitoloEvento))
-            {
-                Console.WriteLine("Inserisci un titolo corretto");
-            }
+        Console.WriteLine("Inserisci un titolo corretto");
         }
+    }
 
-        public void ControllaPosti ()
+        public void ControllaPosti (int NumeroPosti)
         {
-            if (NumeroPostiEventoPrenotati < 0)
+            if (NumeroPosti < 0)
             {
                 Console.WriteLine("Inserisci un numero di posti maggiore di 0");
             } 
         }
 
-        public void PrenotaPosti()
+        public int PrenotaPosti(int PostiVoluti)
         {
-
+            int NumeroPostiaDisposizione = NumeroPostiTotaliEvento - PostiVoluti;
+            Console.WriteLine("Numero posti a disposizione " + NumeroPostiaDisposizione);
+            return NumeroPostiaDisposizione;
         }
 
-        public void DisdiciPosti ()
-        { 
-        
+        public int DisdiciPosti (int PostiDaDisdire)
+        {
+            int NumeroPostiaDisposizione = NumeroPostiTotaliEvento + PostiDaDisdire;
+            Console.WriteLine("Numero posti a disposizione " + NumeroPostiaDisposizione);
+            return NumeroPostiaDisposizione;
         }
 
         public override string ToString()
