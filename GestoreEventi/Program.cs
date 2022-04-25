@@ -3,71 +3,120 @@
 using GestoreEventi;
 
 Console.WriteLine("Prego inserisci il tuo evento");
+string TitoloEvento = "";
+while (string.IsNullOrEmpty(TitoloEvento))
+{
+    Console.Write("Inserisci il nome dell'evento: ");
+    TitoloEvento = Console.ReadLine();
+}
 
-Console.WriteLine("Inserisci il nome dell'evento: ");
-string TitoloEvento = Console.ReadLine();
+bool DataCorretta = false;
+DateTime DataEvento = DateTime.Now;
+while (!DataCorretta)
+{
+    Console.Write("Inserisci la data nel formato gg/mm/aaaa: ");
+    string sdataEvento = Console.ReadLine();
+    try
+    {
+        DataEvento = Errori.DataValida(sdataEvento);
+        DataCorretta = true;
+        if (DataEvento < DateTime.Now)
+        {
+            Console.WriteLine("Data minore di oggi ");
+            DataCorretta = false;
+        }
+    }
+    catch (Exception e)
+    {
+        Console.WriteLine(e.Message);
+    }
 
-Console.WriteLine("Inserisci la data dell'evento: ");
-DateTime DataEvento = DateTime.Parse(Console.ReadLine());
+}
 
-Console.WriteLine("Inserisci il numero di posti totali: ");
-int NumeroPostiTotaliEvento = Int32.Parse(Console.ReadLine());
+int NumeroPostiTotaliEvento = Errori.numeroValido("Numero Posti Totali Evento: ");
+int numeroPostiEventoPrenotati = 0;
+numeroPostiEventoPrenotati = Errori.numeroValido("Quanti posti desideri prenotare? ");
 
-Console.WriteLine("Quanti posti desideri prenotare? ");
-int numeroPostiEventoPrenotati = Int32.Parse(Console.ReadLine());
+while (numeroPostiEventoPrenotati > NumeroPostiTotaliEvento)
+{
+    Console.WriteLine("I posti prenotati sono maggiori dei posti totali dell'evento!");
+    numeroPostiEventoPrenotati = Errori.numeroValido("Quanti posti desideri prenotare? ");
+}
 
 Evento eventoNuovo = new Evento(TitoloEvento, DataEvento, NumeroPostiTotaliEvento);
-Console.WriteLine(eventoNuovo.ToString());
+
+
+Console.WriteLine("---------------------------");
+Console.Write(eventoNuovo.ToString());
+Console.WriteLine("---------------------------");
 
 Console.WriteLine("Numero di posti prenotati= " + numeroPostiEventoPrenotati);
 eventoNuovo.PrenotaPosti(numeroPostiEventoPrenotati);
 
-Console.WriteLine("Vuoi disdire dei posti (si/no)?");
 int PostidaDisdire = 0;
+Console.WriteLine("Vuoi disdire dei posti (si)?");
+
 while ((Console.ReadLine() == "si"))
 {
-    Console.WriteLine("Indicare il numero di posti da disdire: ");
-    PostidaDisdire = Int32.Parse(Console.ReadLine());
+
+    PostidaDisdire = Errori.numeroValido("Indicare il numero di posti da disdire: ");
     if (PostidaDisdire < numeroPostiEventoPrenotati)
     {
         Console.WriteLine("Numero di posti prenotati= " + (numeroPostiEventoPrenotati - PostidaDisdire));
         eventoNuovo.DisdiciPosti(PostidaDisdire);
+        Console.WriteLine("Vuoi disdire dei posti (si)?");
     }
-    else 
-    {  
+    else
+    {
         Console.WriteLine("Hai esaurito i posti!");
     }
 }
 Console.WriteLine("Ok va bene!");
-Console.WriteLine("Numero di posti prenotati= " + (numeroPostiEventoPrenotati - PostidaDisdire));
-eventoNuovo.PrenotaPosti(numeroPostiEventoPrenotati - PostidaDisdire);
+
+Console.WriteLine("Numero posti prenotati: " + eventoNuovo.GetNumeroPostiEventoPrenotati());
+Console.WriteLine("Numero posti disponibili: " + eventoNuovo.GetNumeroPostiDisponibili());
+
 
 Console.ReadKey();
 Console.Clear();
 
-Console.WriteLine("Nome programma eventi");
-string NomeEvento = Console.ReadLine();
-
-Console.WriteLine("Numero eventi");
-int  NrEventi = Int32.Parse(Console.ReadLine());
-for (int i = 0; i < NrEventi; i++)
+Console.WriteLine("Inserisci il nome del tuo programma Eventi");
+string nomeProgrammaEvento = "";
+while (string.IsNullOrEmpty(nomeProgrammaEvento))
 {
-    Console.WriteLine("Inserisci il nome dell'evento: ");
-    string TitoloEventoN = Console.ReadLine();
+    Console.Write("Inserisci il nome dell'evento: ");
+    nomeProgrammaEvento = Console.ReadLine();
+}
 
-    Console.WriteLine("Inserisci la data dell'evento: ");
-    DateTime DataEventoN = DateTime.Parse(Console.ReadLine());
+ProgrammaEventi eventi = new ProgrammaEventi(nomeProgrammaEvento);
+eventi.aggiungiEventi();
+eventi.StampaListaEventi();
 
-    Console.WriteLine("Inserisci il numero di posti totali: ");
-    int NumeroPostiTotaliEventoN = Int32.Parse(Console.ReadLine());
 
-    Evento AggiungiEvento = new Evento(TitoloEventoN, DataEventoN, NumeroPostiTotaliEventoN);
-
-    Console.WriteLine(AggiungiEvento.ToString());
-    
-    //Console.WriteLine(NumeroEventiInProgramma);
+bool dataCorretta = false;
+DateTime dataEvento = DateTime.Now;
+while (!dataCorretta)
+{
+    Console.Write("Inserisci una data da cercare nel formato gg/mm/aaaa: ");
+    string sdataEventoUno = Console.ReadLine();
+    try
+    {
+        dataEvento = Errori.DataValida(sdataEventoUno);
+        dataCorretta = true;
+        if (dataEvento < DateTime.Now)
+        {
+            Console.WriteLine("Data minore di oggi ");
+            dataCorretta = false;
+        }
+    }
+    catch (Exception e)
+    {
+        Console.WriteLine(e.Message);
+    }
 
 }
+
+eventi.EventoDateUguali(dataEvento);
 
 
 
